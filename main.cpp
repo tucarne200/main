@@ -89,6 +89,51 @@ void tiroParabolico(double v0, double theta) {
     cout << "Magnitud de la velocidad en el punto maximo: " << V_max << " m/s" << endl;
 }
 
+float pedirValorPositivoConDecimal(string mensaje, float min_valor = 0, float max_valor = 1000000) {
+    float valor;
+    while (true) {
+        cout << mensaje;
+        string input;
+        cin >> input;
+
+        if (input.size() == 1 && input[0] == '.') { // Verificar si el usuario ha ingresado solo un punto sin números
+            cout << "Error: se requiere un número después del punto decimal. Intente de nuevo." << endl;
+            continue;
+        }
+
+        if (input[0] == '-') { // Verificar si el primer caracter es un signo negativo
+            cout << "Error: no se permiten valores negativos. Intente de nuevo." << endl;
+            continue;
+        }
+
+        bool is_valid = true;
+        int num_decimals = 0;
+        for (char c : input) {
+            if (!isdigit(c)) { // Verificar si el caracter no es un dígito
+                if (c == '.' && num_decimals == 0) { // Verificar si es un punto decimal
+                    num_decimals++;
+                }
+                else {
+                    is_valid = false;
+                    break;
+                }
+            }
+        }
+
+        if (!is_valid) {
+            cout << "Error: se permiten solamente números positivos con punto decimal. Intente de nuevo." << endl;
+            continue;
+        }
+
+        valor = stof(input);
+        if (valor < min_valor || valor > max_valor) {
+            cout << "Error: el valor debe estar en el rango [" << min_valor << ", " << max_valor << "]. Intente de nuevo." << endl;
+            continue;
+        }
+        break;
+    }
+    return valor;
+}
 
 int main (){
 
@@ -113,188 +158,55 @@ int main (){
         switch(opcion) {
         case 1:
             system("cls");
+            v0 = pedirValorPositivoConDecimal("Ingrese la velocidad inicial (m/s): ");
 
-            msg("Ingrese la velocidad inicial (m/s): ");// Pedimos los valores de v0
-            do {
-                string input;
-                cin >> input;
+            theta_grados = pedirValorPositivoConDecimal("Ingrese el ángulo de lanzamiento (grados): ", 0, 90);
+            theta = theta_grados * PI / 180; // Convertimos el ángulo de grados a radianes
 
-                if (input[0] == '-') { // Verificar si el primer caracter es un signo negativo
-                    cout << "Error: no se permiten valores negativos. Intente de nuevo." << endl;
-                    continue;
-                }
+            t = 2 * v0 * sin(theta) / 9.81; // Calculamos el tiempo de vuelo
 
-                bool is_valid = true;
-                for (char c : input) {
-                    if (!isdigit(c)) { // Verificar si todos los caracteres son dígitos
-                        is_valid = false;
-                        break;
-                    }
-                }
+            cout << "El tiempo de vuelo es " << t << " segundos." << endl; // Mostramos el resultado
 
-                if (!is_valid) {
-                    cout << "Error: se permiten solamente números enteros positivos. Intente de nuevo." << endl;
-                    continue;
-                }
-
-                v0 = stoi(input);
-                break;
-            } while (true);
-
-            msg("Ingrese el ángulo de lanzamiento (grados): ");
-            do {
-                string input;
-                cin >> input;
-
-                if (input[0] == '-') { // Verificar si el primer caracter es un signo negativo
-                    cout << "Error: no se permiten valores negativos. Intente de nuevo." << endl;
-                    continue;
-                }
-
-                bool is_valid = true;
-                for (char c : input) {
-                    if (!isdigit(c)) { // Verificar si todos los caracteres son dígitos
-                        is_valid = false;
-                        break;
-                    }
-                }
-
-                if (!is_valid) {
-                    cout << "Error: se permiten solamente números enteros positivos. Intente de nuevo." << endl;
-                    continue;
-                }
-
-                theta_grados = stoi(input);
-
-                if (theta_grados < 0 || theta_grados > 90) {
-                    cout << "El ángulo debe estar en el rango [0, 90] grados" << endl;
-                    continue;
-                }
-
-                break;
-            } while (true);
-
-            theta = theta_grados * PI / 180;// Convertimos el ángulo de grados a radianes
-
-            t = tiempoDeVuelo(v0, theta);// Calculamos el tiempo de vuelo
-
-            cout << "El tiempo de vuelo es " << t << " segundos." << endl;// Mostramos el resultado
+            msge("presione cualquier tecla para regresar al menu");
 
             system("pause");
             system("cls");
             break;
-
 
         case 2:
             system("cls");
 
-            msg("Ingrese la velocidad inicial (m/s): ");// Pedimos los valores de v0 y theta
-
-            do {
-                string input;
-                cin >> input;
-
-                if (input[0] == '-') { // Verificar si el primer caracter es un signo negativo
-                    cout << "Error: no se permiten valores negativos. Intente de nuevo." << endl;
-                    continue;
-                }
-
-                bool is_valid = true;
-                for (char c : input) {
-                    if (!isdigit(c)) { // Verificar si todos los caracteres son dígitos
-                        is_valid = false;
-                        break;
-                    }
-                }
-
-                if (!is_valid) {
-                    cout << "Error: se permiten solamente números enteros positivos. Intente de nuevo." << endl;
-                    continue;
-                }
-
-                v0 = stoi(input);
-                break;
-            } while (true);
-
-            msg("Ingrese el ángulo de lanzamiento (grados): ");
-            do {
-                string input;
-                cin >> input;
-
-                if (input[0] == '-') { // Verificar si el primer caracter es un signo negativo
-                    cout << "Error: no se permiten valores negativos. Intente de nuevo." << endl;
-                    continue;
-                }
-
-                bool is_valid = true;
-                for (char c : input) {
-                    if (!isdigit(c)) { // Verificar si todos los caracteres son dígitos
-                        is_valid = false;
-                        break;
-                    }
-                }
-
-                if (!is_valid) {
-                    cout << "Error: se permiten solamente números enteros positivos. Intente de nuevo." << endl;
-                    continue;
-                }
-
-                theta_grados = stoi(input);
+            v0 = pedirValorPositivoConDecimal("Ingrese la velocidad inicial (m/s): ");
+            do{
+                theta_grados = pedirValorPositivoConDecimal("Ingrese el ángulo de lanzamiento (grados): ");
                 if (theta_grados < 0 || theta_grados > 90) {
                     cout << "El ángulo debe estar en el rango [0, 90] grados. Intente de nuevo." << endl;
-                    continue;
                 }
-                break;
-            } while (true);
+            }while((theta_grados < 0) || (theta_grados > 90));
 
-            theta = theta_grados * PI / 180;// Convertimos el ángulo de grados a radianes
 
-            h = alturaMaxima(v0, theta);// Calculamos la altura máxima
+            theta = theta_grados * PI / 180;
 
-            cout << "La altura máxima es " << h << " metros." << endl;// Mostramos el resultado
+            h = alturaMaxima(v0, theta);
+
+            cout << "La altura máxima es " << h << " metros." << endl;
 
             system("pause");
             system("cls");
             break;
 
 
+
         case 3:
             system("cls");
+            v0 = pedirValorPositivoConDecimal("Ingrese la velocidad inicial (m/s): ");
 
-            do {
-                cout << "Ingrese la velocidad inicial (m/s): ";// Pedimos los valores de v0 y theta
-                string input;
-                cin >> input;
-
-                if (input[0] == '-') { // Verificar si el primer caracter es un signo negativo
-                    msge("Error: no se permiten valores negativos. Intente de nuevo.");
-                    continue;
+            do{
+                theta_grados = pedirValorPositivoConDecimal("Ingrese el ángulo de lanzamiento (grados): ");
+                if (theta_grados < 0 || theta_grados > 90) {
+                    cout << "El ángulo debe estar en el rango [0, 90] grados. Intente de nuevo." << endl;
                 }
-
-                bool is_valid = true;
-                for (char c : input) {
-                    if (!isdigit(c)) { // Verificar si todos los caracteres son dígitos
-                        is_valid = false;
-                        break;
-                    }
-                }
-
-                if (!is_valid) {
-                    msge("Error: se permiten solamente números enteros positivos. Intente de nuevo.");
-                    continue;
-                }
-
-                v0 = stoi(input);
-                break;
-            } while (true);
-
-            cout << "Ingrese el ángulo de lanzamiento (grados): ";
-            cin >> theta_grados;
-
-            if (theta_grados < 0 || theta_grados > 90) {
-                msge("El ángulo debe estar en el rango [0, 90] grados");
-                break;
-            }
+            }while((theta_grados < 0) || (theta_grados > 90));
 
             theta = theta_grados * PI / 180;// Convertimos el ángulo de grados a radianes
 
@@ -306,118 +218,42 @@ int main (){
             system("cls");
             break;
 
-
         case 4:
             system("cls");
 
-            cout << "Ingrese la velocidad inicial (m/s): ";// Pedimos los valores de v0 y theta
+            v0 = pedirValorPositivoConDecimal("Ingrese la velocidad inicial (m/s): ");
 
-            do {
-                string input;
-                cin >> input;
-
-                if (input[0] == '-') { // Verificar si el primer caracter es un signo negativo
-                    cout << "Error: no se permiten valores negativos. Intente de nuevo." << endl;
-                    continue;
+            do{
+                theta_grados = pedirValorPositivoConDecimal("Ingrese el ángulo de lanzamiento (grados): ");
+                
+                if (theta_grados < 0 || theta_grados > 90) {
+                    cout << "El ángulo debe estar en el rango [0, 90] grados. Intente de nuevo." << endl;
                 }
+            }while((theta_grados < 0) || (theta_grados > 90));
 
-                bool is_valid = true;
-                for (char c : input) {
-                    if (!isdigit(c)) { // Verificar si todos los caracteres son dígitos
-                        is_valid = false;
-                        break;
-                    }
-                }
+            theta = (theta_grados * PI) / 180; // Convertimos el ángulo de grados a radianes
 
-                if (!is_valid) {
-                    cout << "Error: se permiten solamente números enteros positivos. Intente de nuevo." << endl;
-                    continue;
-                }
+            Vx = velocidadHorizontal(v0, theta); // Calculamos la velocidad horizontal
 
-                v0 = stoi(input);
-                break;
-            } while (true);
-
-            cout << "Ingrese el ángulo de lanzamiento (grados): ";
-            cin >> theta_grados;
-
-            if (theta_grados < 0 || theta_grados > 90) {
-                cout << "El ángulo debe estar en el rango [0, 90] grados" << endl;
-                break;
-            }
-
-            theta = (theta_grados * PI)/(180);// Convertimos el ángulo de grados a radianes
-
-            Vx = velocidadHorizontal(v0, theta);// Calculamos la velocidad horizontal
-
-            cout << "La velocidad horizontal es " << Vx << " m/s."<< endl;// Mostramos el resultado
+            cout << "La velocidad horizontal es " << Vx << " m/s." << endl; // Mostramos el resultado
 
             system("pause");
             system("cls");
             break;
 
-
         case 5:
             system("cls");
 
             msg("Ingrese la velocidad inicial (m/s): "); // Pedimos los valores de v0 y theta
-            do {
-                string input;
-                cin >> input;
+            
+            v0 = pedirValorPositivoConDecimal("Ingrese la velocidad inicial (m/s): ");
 
-                if (input[0] == '-') { // Verificar si el primer caracter es un signo negativo
-                    cout << "Error: no se permiten valores negativos. Intente de nuevo." << endl;
-                    continue;
+            do{
+                theta_grados = pedirValorPositivoConDecimal("Ingrese el ángulo de lanzamiento (grados): ");
+                if (theta_grados < 0 || theta_grados > 90) {
+                    cout << "El ángulo debe estar en el rango [0, 90] grados. Intente de nuevo." << endl;
                 }
-
-                bool is_valid = true;
-                for (char c : input) {
-                    if (!isdigit(c)) { // Verificar si todos los caracteres son dígitos
-                        is_valid = false;
-                        break;
-                    }
-                }
-
-                if (!is_valid) {
-                    cout << "Error: se permiten solamente números enteros positivos. Intente de nuevo." << endl;
-                    continue;
-                }
-
-                v0 = stoi(input);
-                break;
-            } while (true);
-
-            msg("Ingrese el ángulo de lanzamiento (grados): ");
-            do {
-                string input;
-                cin >> input;
-
-                if (input[0] == '-') { // Verificar si el primer caracter es un signo negativo
-                    cout << "Error: no se permiten valores negativos. Intente de nuevo." << endl;
-                    continue;
-                }
-
-                bool is_valid = true;
-                for (char c : input) {
-                    if (!isdigit(c)) { // Verificar si todos los caracteres son dígitos
-                        is_valid = false;
-                        break;
-                    }
-                }
-
-                if (!is_valid) {
-                    cout << "Error: se permiten solamente números enteros positivos. Intente de nuevo." << endl;
-                    continue;
-                }
-
-                theta_grados = stoi(input);
-                break;
-            } while (true);
-
-            if (theta_grados < 0 || theta_grados > 90) {
-                msge("El ángulo debe estar en el rango [0, 90] grados");
-                break;
-            }
+            }while((theta_grados < 0) || (theta_grados > 90));
 
             theta = theta_grados * PI / 180; // Convertimos el ángulo de grados a radianes
 
@@ -435,64 +271,15 @@ int main (){
 
         case 6:
             system("cls");
-            msg("Ingrese la velocidad inicial (m/s): "); // Pedimos los valores de v0 y theta
-            do {
-                string input;
-                cin >> input;
 
-                if (input[0] == '-') { // Verificar si el primer caracter es un signo negativo
-                    cout << "Error: no se permiten valores negativos. Intente de nuevo." << endl;
-                    continue;
+            v0 = pedirValorPositivoConDecimal("Ingrese la velocidad inicial (m/s): ");
+
+            do{
+                theta_grados = pedirValorPositivoConDecimal("Ingrese el ángulo de lanzamiento (grados): ");
+                if (theta_grados < 0 || theta_grados > 90) {
+                    cout << "El ángulo debe estar en el rango [0, 90] grados. Intente de nuevo." << endl;
                 }
-
-                bool is_valid = true;
-                for (char c : input) {
-                    if (!isdigit(c)) { // Verificar si todos los caracteres son dígitos
-                        is_valid = false;
-                        break;
-                    }
-                }
-
-                if (!is_valid) {
-                    cout << "Error: se permiten solamente números enteros positivos. Intente de nuevo." << endl;
-                    continue;
-                }
-
-                v0 = stoi(input);
-                break;
-            } while (true);
-
-            msg("Ingrese el ángulo de lanzamiento (grados): ");
-            do {
-                string input;
-                cin >> input;
-
-                if (input[0] == '-') { // Verificar si el primer caracter es un signo negativo
-                    cout << "Error: no se permiten valores negativos. Intente de nuevo." << endl;
-                    continue;
-                }
-
-                bool is_valid = true;
-                for (char c : input) {
-                    if (!isdigit(c)) { // Verificar si todos los caracteres son dígitos
-                        is_valid = false;
-                        break;
-                    }
-                }
-
-                if (!is_valid) {
-                    cout << "Error: se permiten solamente números enteros positivos. Intente de nuevo." << endl;
-                    continue;
-                }
-
-                theta_grados = stoi(input);
-                break;
-            } while (true);
-
-            if (theta_grados < 0 || theta_grados > 90) {
-                msge("El ángulo debe estar en el rango [0, 90] grados");
-                break;
-            }
+            }while((theta_grados < 0) || (theta_grados > 90));
 
             theta = theta_grados * PI / 180; // Convertimos el ángulo de grados a radianes
 
@@ -501,7 +288,6 @@ int main (){
             system("pause");
             system("cls");
             break;
-
 
         case 0:
             system("cls");
