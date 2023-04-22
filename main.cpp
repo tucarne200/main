@@ -171,6 +171,7 @@ int main (){
 
             system("pause");
             system("cls");
+            
             break;
 
         case 2:
